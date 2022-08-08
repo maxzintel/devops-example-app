@@ -21,16 +21,16 @@ jobs:
         run: ./.github/scripts/build.sh
   deploy-staging:
     runs-on: ubuntu-20.04
-    if: ${{ env.branch != 'main' }}
+    if: ${{ $branch != 'main' }}
     env:
       DEPLOY_ENVIRONMENT: 'staging'
     steps:
       - id: deploy
-        name: "Deploy ${{ env.branch }} to Staging Environment"
+        name: "Deploy ${{ $branch }} to Staging Environment"
         run: echo 'Deploying Staging...'
   deploy-production:
     runs-on: ubuntu-20.04
-    if: ${{ env.branch == 'main' }}
+    if: ${{ $branch == 'main' }}
     env:
       DEPLOY_ENVIRONMENT: 'production'
     steps:
