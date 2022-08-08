@@ -19,24 +19,21 @@ jobs:
     steps:
       - id: build
         run: ./.github/scripts/build.sh
-  deploy-staging:
+  deploy:
     runs-on: ubuntu-20.04
-    if: ${{ env.branch != 'main' }}
-    env:
-      DEPLOY_ENVIRONMENT: 'staging'
     steps:
-      - id: deploy
+      - id: deploy-staging
+        if: ${{ env.branch != 'main' }}
         name: "Deploy $branch to Staging Environment"
         run: echo 'Deploying Staging...'
-  deploy-production:
-    runs-on: ubuntu-20.04
-    if: ${{ env.branch == 'main' }}
-    env:
-      DEPLOY_ENVIRONMENT: 'production'
-    steps:
-      - id: deploy
+        env:
+          DEPLOY_ENVIRONMENT: 'staging'
+      - id: deploy-production
+        if: ${{ env.branch == 'main' }}
         name: "Deploy to Production Environment"
         run: echo 'Deploying Production...'
+        env:
+          DEPLOY_ENVIRONMENT: 'staging'
 
 
       
