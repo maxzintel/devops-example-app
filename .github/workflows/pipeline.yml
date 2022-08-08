@@ -1,0 +1,42 @@
+env:
+  branch: ${{ github.head_ref || github.ref_name }} 
+
+name: base
+on: 
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
+  pull_request:
+    branches:
+      - main
+      - 'releases/**'
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    env:
+      ECR_REPO: example.com
+    steps:
+      - id: build
+        run: ./.github/scripts/build.sh
+  deploy-staging:
+    runs-on: ubuntu-20.04
+    if: ${{ env.branch != 'main' }}
+    env:
+      DEPLOY_ENVIRONMENT: 'staging'
+    steps:
+      - id: deploy
+        name: "Deploy ${{ env.branch }} to Staging Environment"
+        run: echo 'Deploying Staging...'
+  deploy-production:
+    runs-on: ubuntu-20.04
+    if: ${{ env.branch == 'main' }}
+    env:
+      DEPLOY_ENVIRONMENT: 'production'
+    steps:
+      - id: deploy
+        name: "Deploy to Production Environment"
+        run: echo 'Deploying Production...'
+
+
+      
