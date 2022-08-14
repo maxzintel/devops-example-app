@@ -5,12 +5,14 @@ name: 🔧 CI/CD Pipeline
 on: 
   push:
     paths-ignore:
-      - 'docs/**'
-      - 'README.md'
+    - 'docs/**'
+    - 'README.md'
+    branches:
+    - main
   pull_request:
     branches:
-      - main
-      - 'releases/**'
+    - main
+    - 'releases/**'
 jobs:
   build:
     runs-on: ubuntu-20.04
