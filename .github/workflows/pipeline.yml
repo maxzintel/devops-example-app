@@ -14,7 +14,7 @@ on:
     - main
     - 'releases/**'
 jobs:
-  build:
+  Build:
     runs-on: ubuntu-20.04
     env:
       ECR_REPO: example.com
@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v2.4.2
       - id: build
         run: ./.github/scripts/build.sh
-  deploy:
+  Deploy:
     runs-on: ubuntu-20.04
     steps:
       - id: deploy-staging
@@ -38,6 +38,3 @@ jobs:
         run: echo 'Deploying Production...'
         env:
           DEPLOY_ENVIRONMENT: 'staging'
-
-
-      
