@@ -23,38 +23,15 @@ main() {
 
     # Function here to determine which type of branch we are on and thus which vars to use when deploying.
 
-    # If true, kick off **STAGING** deploy.
-    if [[ ${$BRANCH:-x} == "" ]]; then
-      # Grab kubeconfig somehow
+    # Grab kubeconfig somehow
 
-        kustomize-backend-deploy
-        monitor-migrations
+    echo -e "+++ :k8s: Initiating Deploy"
+    k8s_deploy
 
-        echo -e "+++ :k8s: Monitor Rollout"
-        kubectl rollout status "deployment/${DEPLOY_RELEASE}-web"
-        kubectl rollout status "deployment/${DEPLOY_RELEASE}-worker"
-
-        if [[ "${BETA_BRANCH:+x}" != "" ]]; then
-            echo -e "+++ :k8s: Deploy Beta"
-            kustomize-beta-deploy
-        fi
-    else
-        nestctl eks-kubeconfig "${EKS_CLUSTER}" "${KUBECONFIG}"
-        echo -e "+++ :k8s: Deploy Staging via Kustomize"
-        kustomize_staging_deploy
-        monitor-migrations
-
-        echo -e "+++ :k8s: Monitor Rollout"
-        kubectl rollout status "deployment/${DEPLOY_RELEASE}-web"
-        kubectl rollout status "deployment/${DEPLOY_RELEASE}-worker"
-        kubectl rollout status "deployment/${DEPLOY_RELEASE}-redis"
-    fi
-
-    nestctl broadcast-deploy-complete
-
-    if [[ ${DEPLOY_ENVIRONMENT:-x} == "production" ]]; then
-        jira-is-deployed-webhook
-    fi
+    echo -e "+++ :k8s: Monitor Rollout"
+    kubectl rollout status "deployment/${DEPLOY_RELEASE}-web"
+    kubectl rollout status "deployment/${DEPLOY_RELEASE}-worker"
+    kubectl rollout status "deployment/${DEPLOY_RELEASE}-redis"
 }
 
 k8s_deploy() {
