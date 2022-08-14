@@ -1,7 +1,7 @@
 env:
   branch: ${{ github.head_ref || github.ref_name }} 
 
-name: base
+name: 🔧 CI/CD Pipeline
 on: 
   push:
     paths-ignore:
@@ -17,6 +17,8 @@ jobs:
     env:
       ECR_REPO: example.com
     steps:
+      - name: Test path
+        run: ls -la
       - id: build
         run: ./.github/scripts/build.sh
   deploy:
