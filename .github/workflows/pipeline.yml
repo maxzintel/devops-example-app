@@ -17,8 +17,8 @@ jobs:
     env:
       ECR_REPO: example.com
     steps:
-      - name: Test path
-        run: ls -la
+      - name: Checkout
+        uses: actions/checkout@v2.4.2
       - id: build
         run: ./.github/scripts/build.sh
   deploy:
