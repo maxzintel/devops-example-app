@@ -1,0 +1,40 @@
+env:
+  branch: ${{ github.head_ref || github.ref_name }} 
+
+name: 🔧 CI/CD Pipeline
+on: 
+  push:
+    paths-ignore:
+    - 'docs/**'
+    - 'README.md'
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+    - 'releases/**'
+jobs:
+  Build:
+    runs-on: ubuntu-20.04
+    env:
+      ECR_REPO: example.com
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.4.2
+      - id: build
+        run: ./.github/scripts/build.sh
+  Deploy:
+    runs-on: ubuntu-20.04
+    steps:
+      - id: deploy-staging
+        if: ${{ env.branch != 'main' }}
+        name: "Deploy $branch to Staging Environment"
+        run: echo 'Deploying Staging...'
+        env:
+          DEPLOY_ENVIRONMENT: 'staging'
+      - id: deploy-production
+        if: ${{ env.branch == 'main' }}
+        name: "Deploy to Production Environment"
+        run: echo 'Deploying Production...'
+        env:
+          DEPLOY_ENVIRONMENT: 'staging'
