@@ -30,8 +30,6 @@ jobs:
         with:
           version: latest
       
-      # TO DO
-      # Create ECR Repo
       - name: Login to ECR
         uses: docker/login-action@v1
         with:
