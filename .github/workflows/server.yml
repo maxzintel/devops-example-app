@@ -46,7 +46,7 @@ jobs:
           push: true
           tags: |
             ${{ secrets.AWS_ECR_URL }}:latest
-            ${{ secrets.AWS_ECR_URL }}:${{ github.runner_os }}-${{ github.run_number }}
+            ${{ secrets.AWS_ECR_URL }}:${{ runner.os }}-${{ github.run_number }}
           secrets: GIT_AUTH_TOKEN=${{ github.token }}
 
 # IDEA
