@@ -1,0 +1,40 @@
+env:
+  branch: ${{ github.head_ref || github.ref_name }} 
+
+name: 🏢 Build & Push Server
+on: 
+  push:
+    paths:
+    - 'server/**'
+    branches:
+    - main
+  pull_request:
+    paths:
+    - 'server/**'
+    branches:
+    - main
+    - 'releases/**'
+# All jobs run on different VM's, so we do have to repeat some things here.
+jobs:
+  Server:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v2.4.2
+
+      - name: Setup Repository
+        id: setup_server
+        uses: .github/jobs/setup.yml
+
+      - name: Build and Push Server
+        id: docker_build_server
+        uses: docker/build-push-action@v3
+        with:
+          context: ./server
+          file: ./server/Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.AWS_ECR_URL }}/chainlink-server:latest
+            ${{ secrets.AWS_ECR_URL }}/chainlink-server:${{ runner.os }}-${{ github.run_number }}
+          secrets: GIT_AUTH_TOKEN=${{ github.token }}
