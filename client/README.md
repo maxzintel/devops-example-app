@@ -13,3 +13,4 @@ Example value: `http://localhost:3000/`
 - Run `yarn`
 - Run `yarn build`
 - The static assets will be generated within the `build` directory
+<!-- foo -->
