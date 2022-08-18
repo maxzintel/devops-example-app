@@ -40,3 +40,18 @@ jobs:
           registry: ${{ secrets.AWS_ECR_URL }}
           username: ${{ secrets.AWS_ACCESS_KEY_ID }}
           password: ${{ secrets.AWS_ACCESS_KEY }}
+  Server:
+    runs-on: ubuntu-20.04
+    needs: Setup
+    steps:
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v3
+        with:
+          context: ./server
+          file: ./server/Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.AWS_ECR_URL }}/chainlink-server:latest
+            ${{ secrets.AWS_ECR_URL }}/chainlink-server:${{ runner.os }}-${{ github.run_number }}
+          secrets: GIT_AUTH_TOKEN=${{ github.token }}
