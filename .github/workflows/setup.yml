@@ -23,11 +23,7 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       ECR_REPO: example.com # Just putting this here as a reference for later env var population.
-    steps:  
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v2.4.2
-        
+    steps:       
       - name: Setup Docker Buildx action
         id: buildx
         uses: docker/setup-buildx-action@v1.7.0
