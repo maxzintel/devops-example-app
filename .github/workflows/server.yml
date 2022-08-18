@@ -25,7 +25,7 @@ jobs:
 
       - name: Setup Repository
         id: setup_server
-        uses: ./.github/workflows/setup.yml
+        uses: .github/workflows/setup.yml
 
       - name: Build and Push Server
         id: docker_build_server
