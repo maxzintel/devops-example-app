@@ -1,7 +1,7 @@
 env:
   branch: ${{ github.head_ref || github.ref_name }} 
 
-name: 🏗️ Pipeline Setup - Checkout Repo & Login to ECR
+name: 🏢 Build & Push Server
 on: 
   push:
     paths:
@@ -25,7 +25,7 @@ jobs:
 
       - name: Setup Repository
         id: setup_server
-        uses: .github/workflows/setup.yml
+        uses: .github/jobs/setup.yml
 
       - name: Build and Push Server
         id: docker_build_server
