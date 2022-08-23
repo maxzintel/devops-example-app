@@ -46,4 +46,6 @@ jobs:
           tags: |
             ${{ secrets.AWS_ECR_URL }}/chainlink-client:latest
             ${{ secrets.AWS_ECR_URL }}/chainlink-client:${{ runner.os }}-${{ github.run_number }}
+          cache-from: type=registry,ref=${{ secrets.AWS_ECR_URL }}/chainlink-app:buildcache
+          cache-to: type=registry,ref=${{ secrets.AWS_ECR_URL }}/chainlink-app:buildcache,mode=max
           secrets: GIT_AUTH_TOKEN=${{ github.token }}
