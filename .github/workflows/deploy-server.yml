@@ -1,0 +1,28 @@
+env:
+  branch: ${{ github.head_ref || github.ref_name }} 
+
+name: 🚀 Deploy Server to Production
+on: 
+  workflow_run:
+    workflows:
+      - "🏢 Build & Push Server"
+    types:
+      - "completed"
+    branch:
+      - $branch
+  # push:
+  #   paths:
+  #   - 'server/**'
+  #   - 'kube/bases/server/**'
+  #   branches:
+  #   - main
+
+jobs:
+  Deploy_Server:
+    name: Deploy_Server
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v2.4.2
+

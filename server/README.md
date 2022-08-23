@@ -28,4 +28,4 @@ The following environment variables are supported:
 | REDIS_PASSWORD| string | Redis password | |
 | PORT| string | HTTP server port | 3030|
 
-foo bar blah blah blah
+<!-- foo bar -->
