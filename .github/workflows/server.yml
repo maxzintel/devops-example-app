@@ -6,17 +6,20 @@ on:
   push:
     paths:
     - 'server/**'
+    - 'kube/bases/server/**'
     branches:
     - main
   pull_request:
     paths:
     - 'server/**'
+    - 'kube/bases/server/**'
     branches:
     - main
     - 'releases/**'
 # All jobs run on different VM's, so we do have to repeat some things here.
 jobs:
-  Server:
+  Build_Server:
+    name: Build_Server
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout

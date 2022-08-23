@@ -1,0 +1,47 @@
+piVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server
+  labels:
+    component: server
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 50%
+  selector:
+    matchLabels:
+      component: server
+  template:
+    metadata:
+      labels:
+        component: server
+    spec:
+      serviceAccountName: server
+      containers:
+        - name: server
+          image: 798792373271.dkr.ecr.us-east-1.amazonaws.com/chainlink-server:latest
+          command: ["yarn", "start"]
+          envFrom:
+            - configMapRef:
+                name: config
+          env:
+          - name: foo
+            value: 'bar'
+          ports:
+            - name: listen
+              containerPort: 3030  # Available to all other nodes on the cluster, but does not use 3030 on the actual nodes.
+          resources:
+            requests:
+              memory: "100M"
+              cpu: "0.25"
+            limits:
+              memory: "100M"
+              cpu: "0.25"
+          # ADD LIVENESS/READINESS PROBES
+          lifecycle:
+            preStop:
+              # pause for 10 seconds before shutdown to handle any stray traffic
+              exec:
+                command: ["/bin/sleep", "10"]
