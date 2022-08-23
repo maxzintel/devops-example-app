@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  labels:
+    component: redis
+spec:
+  ports:
+  - protocol: TCP
+    port: 6379
+    name: peer
+  # clusterIP: None # Creates a headless service to manage DNS entries
+  selector:
+    component: redis

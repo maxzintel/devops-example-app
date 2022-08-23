@@ -1,25 +1,22 @@
 env:
   branch: ${{ github.head_ref || github.ref_name }} 
 
-name: 🏢 Build & Push Server
+name: 💄 Build & Push Client
 on: 
   push:
     paths:
-    - 'server/**'
-    - 'kube/bases/server/**'
+    - 'client/**'
     branches:
     - main
   pull_request:
     paths:
-    - 'server/**'
-    - 'kube/bases/server/**'
+    - 'client/**'
     branches:
     - main
     - 'releases/**'
 # All jobs run on different VM's, so we do have to repeat some things here.
 jobs:
-  Build_Server:
-    name: Build_Server
+  Client:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
@@ -28,7 +25,7 @@ jobs:
 
       - name: Setup Docker Buildx action
         id: buildx
-        uses: docker/setup-buildx-action@v1.7.0
+        uses: docker/setup-buildx-action@v2
         with:
           version: latest
       
@@ -39,14 +36,14 @@ jobs:
           username: ${{ secrets.AWS_ACCESS_KEY_ID }}
           password: ${{ secrets.AWS_ACCESS_KEY }}
 
-      - name: Build and Push Server
-        id: docker_build_server
+      - name: Build and Push client
+        id: docker_build_client
         uses: docker/build-push-action@v3
         with:
-          context: ./server
-          file: ./server/Dockerfile
+          context: ./client
+          file: ./client/Dockerfile
           push: true
           tags: |
-            ${{ secrets.AWS_ECR_URL }}/chainlink-server:latest
-            ${{ secrets.AWS_ECR_URL }}/chainlink-server:${{ runner.os }}-${{ github.run_number }}
+            ${{ secrets.AWS_ECR_URL }}/chainlink-client:latest
+            ${{ secrets.AWS_ECR_URL }}/chainlink-client:${{ runner.os }}-${{ github.run_number }}
           secrets: GIT_AUTH_TOKEN=${{ github.token }}
