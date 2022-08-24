@@ -7,3 +7,12 @@ commonLabels:
 resources:
 - service.yaml
 - deployment.yaml
+
+vars:
+  - fieldref:
+      fieldpath: metadata.labels.image_tag
+    name: TAG
+    objref:
+      name: client
+      apiVersion: apps/v1
+      kind: Deployment
