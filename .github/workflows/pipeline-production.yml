@@ -111,5 +111,9 @@ jobs:
           DEPLOY_RELEASE: chainlink-production
           ENV: production
           APP: chainlink
+          RDS_ENDPOINT: ${{ secrets.RDS_ENDPOINT }}
+          RDS_PW: ${{ secrets.RDS_PW }}
+          RDS_UN: ${{ secrets.RDS_UN }}
+          ELASTICACHE_ENDPOINT: ${{ secrets.ELASTICACHE_ENDPOINT }}
         run: |
           sh .github/scripts/deploy.sh

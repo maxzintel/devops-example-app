@@ -10,7 +10,8 @@ commonLabels:
 resources:
 - ../../bases/base
 
-# configMapGenerator:
-#   - name: config-server
-#     literals:
-#     - 
+secretGenerator:
+  - name: secrets
+    envs: 
+    - secrets-gen.env
+    type: Opaque

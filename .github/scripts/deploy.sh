@@ -39,13 +39,18 @@ k8s_deploy() {
     kustomize edit add label -f app:${APP}
 
     # get app secrets, output to temp secrets-gen file we look at in kustomization.yaml
+    cat >>secrets-gen.env <<- EOF
+		REDIS_HOST=${ELASTICACHE_ENDPOINT}
+        TYPEORM_HOST=${RDS_ENDPOINT}
+        TYPEORM_USERNAME=${RDS_UN}
+        TYPEORM_PASSWORD=${RDS_PW}
+	EOF
     #  > secrets-gen.env
 
     # inject necessary dynamic vals to the configmap
     # cat >>config-gen.env <<- EOF
 	# 	ENVIRONMENT=staging-${ENV_ID}
 	# EOF
-    # popd
     cd -
     # build + apply manifest
     kustomize build "kube/overlays/${ENV}/" | kubectl apply -f -
