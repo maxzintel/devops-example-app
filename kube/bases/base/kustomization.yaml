@@ -8,6 +8,3 @@ bases:
 - ../server
 - ../client
 
-
-resources:
-- serviceaccount.yaml
