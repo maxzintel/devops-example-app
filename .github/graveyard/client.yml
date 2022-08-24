@@ -32,9 +32,8 @@ jobs:
       - name: Login to ECR
         uses: docker/login-action@v1
         with:
-          registry: ${{ secrets.AWS_ECR_URL }}
-          username: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          password: ${{ secrets.AWS_ACCESS_KEY }}
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_KEY }}
 
       - name: Build and Push client
         id: docker_build_client
@@ -44,8 +43,6 @@ jobs:
           file: ./client/Dockerfile
           push: true
           tags: |
-            ${{ secrets.AWS_ECR_URL }}/chainlink-client:latest
-            ${{ secrets.AWS_ECR_URL }}/chainlink-client:${{ runner.os }}-${{ github.run_number }}
-          cache-from: type=registry,ref=${{ secrets.AWS_ECR_URL }}/chainlink-app:buildcache
-          cache-to: type=registry,ref=${{ secrets.AWS_ECR_URL }}/chainlink-app:buildcache,mode=max
+            ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-client:latest
+            ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-client:${{ runner.os }}-${{ github.run_number }}
           secrets: GIT_AUTH_TOKEN=${{ github.token }}

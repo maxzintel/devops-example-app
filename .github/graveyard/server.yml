@@ -48,7 +48,4 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-server:latest
             ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-server:${{ runner.os }}-${{ github.run_number }}
-          # cache-from: type=registry,ref=${{ secrets.AWS_ECR_URL }}/chainlink-server:latest
-          # cache-to: type=registry,ref=${{ secrets.AWS_ECR_URL }}/chainlink-server:latest,mode=max
-          no-cache: true
           secrets: GIT_AUTH_TOKEN=${{ github.token }}

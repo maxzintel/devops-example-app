@@ -8,8 +8,8 @@ on:
       - "🏢 Build & Push Server"
     types:
       - "completed"
-    branch:
-      - $branch
+    # branch:
+    #   - $branch
   # push:
   #   paths:
   #   - 'server/**'
