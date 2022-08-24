@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # A script that handles deploying to staging and production dynamically.
-#!/bin/bash
 
 # Halt this script on non-zero returns codes
 # and properly pipe failures
