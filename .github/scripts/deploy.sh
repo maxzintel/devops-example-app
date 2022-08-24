@@ -4,7 +4,6 @@
 
 # Halt this script on non-zero returns codes
 # and properly pipe failures
-set -eou pipefail
 
 export APP=""
 export IMAGE_REPO=""
