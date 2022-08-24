@@ -25,7 +25,7 @@ main() {
 
 k8s_deploy() {
     echo -e "+++ :k8s: Deploy Env."
-
+    echo ${DEPLOY_ENVIRONMENT}
     cd "kube/overlays/${DEPLOY_ENVIRONMENT}/"
     kustomize edit set image "${IMAGE_REPO}=:${IMAGE_TAG}"
     kustomize edit set nameprefix "${DEPLOY_RELEASE}-"
