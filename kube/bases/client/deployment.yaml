@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client
+  labels:
+    component: client
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 100%
+      maxSurge: 100%
+  selector:
+    matchLabels:
+      component: client
+  template:
+    metadata:
+      labels:
+        component: client
+    spec:
+      serviceAccountName: client
+      containers:
+        - name: client
+          image: s1dequest/chainlink-client:$TAG
+          # envFrom:
+          #   - configMapRef:
+          #       name: config
+          env:
+          - name: foo
+            value: 'bar'
+          ports:
+            - name: listen
+              containerPort: 80  # HOST PORT IN DOCKER COMPOSE IS 8080 BUT THIS WILL BE URL WHEN INGRRESS IS SET.
+          resources:
+            requests:
+              memory: "100M"
+              cpu: "0.25"
+            limits:
+              memory: "100M"
+              cpu: "0.25"
+          # ADD LIVENESS/READINESS PROBES
+          lifecycle:
+            preStop:
+              # pause for 10 seconds before shutdown to handle any stray traffic
+              exec:
+                command: ["/bin/sleep", "10"]

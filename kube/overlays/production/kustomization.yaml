@@ -9,3 +9,25 @@ commonLabels:
 
 resources:
 - ../../bases/base
+
+vars:
+  - fieldref:
+      fieldpath: metadata.labels.image_tag
+    name: TAG
+    objref:
+      name: client
+      apiVersion: apps/v1
+      kind: Deployment
+  - fieldref:
+      fieldpath: metadata.labels.image_tag
+    name: TAG
+    objref:
+      name: server
+      apiVersion: apps/v1
+      kind: Deployment
+
+
+# configMapGenerator:
+#   - name: config-server
+#     literals:
+#     - 

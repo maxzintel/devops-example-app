@@ -27,11 +27,12 @@ main() {
 k8s_deploy() {
     echo -e "+++ :k8s: Deploy Env."
     cd "kube/overlays/${ENV}/"
-    kustomize edit set image "${IMAGE_REPO}=:${IMAGE_TAG}"
+    # kustomize edit set image "${IMAGE_REPO}=:${IMAGE_TAG}"
     kustomize edit set nameprefix "${DEPLOY_RELEASE}-"
     kustomize edit add label -f release:${DEPLOY_RELEASE}
     kustomize edit add label -f environment:staging
     kustomize edit add label -f app:${APP}
+    kustomize edit add label -f image_tag:${IMAGE_TAG}
 
     # get app secrets, output to temp secrets-gen file we look at in kustomization.yaml
     #  > secrets-gen.env
@@ -43,7 +44,7 @@ k8s_deploy() {
     # popd
     cd -
     # build + apply manifest
-    kustomize build "kube/overlays/${ENV}/" | kubectl apply -f -
+    kustomize build "kube/overlays/${ENV}/" # | kubectl apply -f -
 }
 
 main

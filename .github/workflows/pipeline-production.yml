@@ -86,10 +86,10 @@ jobs:
             ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-client:${{ runner.os }}-${{ github.run_number }}
             ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-client:${{ runner.os }}-${{ github.sha }}
           secrets: GIT_AUTH_TOKEN=${{ github.token }}
-  Deploy_Server:
-    name: 🚀 Deploy Server to Production
+  Deploy_App:
+    name: 🚀 Deploy to Production
     runs-on: ubuntu-20.04
-    needs: Build_Server
+    needs: [ Build_Server, Build_Client ]
     steps:
       - name: Checkout
         id: checkout
@@ -103,13 +103,13 @@ jobs:
           aws-region: us-east-1
       
       - name: Run Deploy Script
-        id: deploy_server
+        id: deploy_app
         env:
-          IMAGE_REPO: ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-server
+          IMAGE_REPO_SERVER: ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-server
+          IMAGE_REPO_CLIENT: ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-client
           IMAGE_TAG: ${{ runner.os }}-${{ github.run_number }}
           DEPLOY_RELEASE: chainlink-production
           ENV: production
           APP: chainlink
         run: |
           sh .github/scripts/deploy.sh
-
