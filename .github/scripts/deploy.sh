@@ -26,7 +26,7 @@ main() {
 k8s_deploy() {
     echo -e "+++ :k8s: Deploy Env."
 
-    pushd "kube/overlays/${DEPLOY_ENVIRONMENT}/"
+    cd "kube/overlays/${DEPLOY_ENVIRONMENT}/"
     kustomize edit set image "${IMAGE_REPO}=:${IMAGE_TAG}"
     kustomize edit set nameprefix "${DEPLOY_RELEASE}-"
     kustomize edit add label -f release:${DEPLOY_RELEASE}
@@ -41,7 +41,7 @@ k8s_deploy() {
 	# 	ENVIRONMENT=staging-${ENV_ID}
 	# EOF
     # popd
-
+    cd
     # build + apply manifest
     kustomize build "kube/overlays/${DEPLOY_ENVIRONMENT}/" # | kubectl apply -f -
 }
