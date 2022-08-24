@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: server
+  name: client
   labels:
-    component: server
+    component: client
 spec:
   replicas: 2
   strategy:
@@ -13,17 +13,16 @@ spec:
       maxSurge: 100%
   selector:
     matchLabels:
-      component: server
+      component: client
   template:
     metadata:
       labels:
-        component: server
+        component: client
     spec:
-      serviceAccountName: server
+      serviceAccountName: client
       containers:
-        - name: server
-          image: s1dequest/chainlink-server:latest
-          command: ["yarn", "start"]
+        - name: client
+          image: s1dequest/chainlink-client:latest
           # envFrom:
           #   - configMapRef:
           #       name: config
@@ -32,13 +31,13 @@ spec:
             value: 'bar'
           ports:
             - name: listen
-              containerPort: 3030  # Available to all other nodes on the cluster, but does not use 3030 on the actual nodes.
+              containerPort: 80  # HOST PORT IN DOCKER COMPOSE IS 8080 BUT THIS WILL BE URL WHEN INGRRESS IS SET.
           resources:
             requests:
-              memory: "512M"
+              memory: "100M"
               cpu: "0.25"
             limits:
-              memory: "512M"
+              memory: "100M"
               cpu: "0.25"
           # ADD LIVENESS/READINESS PROBES
           lifecycle:

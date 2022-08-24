@@ -27,5 +27,3 @@ The following environment variables are supported:
 | REDIS_PORT| string | Redis host port | 6379|
 | REDIS_PASSWORD| string | Redis password | |
 | PORT| string | HTTP server port | 3030|
-
-<!-- foo bar -->
