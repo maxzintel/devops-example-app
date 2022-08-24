@@ -45,7 +45,7 @@ k8s_deploy() {
     # can kubeconfig be differently set?
     kustomize build "kube/overlays/${ENV}/" > tmp.yaml
     cat tmp.yaml
-    kubectl apply -f tmp.yaml
+    # kubectl apply -f tmp.yaml
 }
 
 main
