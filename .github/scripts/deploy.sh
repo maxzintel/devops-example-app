@@ -18,7 +18,7 @@ main() {
     # Function here to determine which type of branch we are on and thus which vars to use when deploying.
 
     # Grab kubeconfig somehow
-    aws eks update-kubeconfig --name ${EKS_CLUSTER} --role arn:aws:iam::798792373271:role/Admin # --kubeconfig $(pwd)/kubeconfig
+    aws eks update-kubeconfig --name production --role arn:aws:iam::798792373271:role/Admin # --kubeconfig $(pwd)/kubeconfig
 
     kubectl get svc 
     # echo -e "+++ :k8s: Initiating Deploy"
