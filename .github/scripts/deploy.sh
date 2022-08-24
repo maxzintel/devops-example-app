@@ -42,7 +42,10 @@ k8s_deploy() {
     # popd
     cd -
     # build + apply manifest
-    kustomize build "kube/overlays/${ENV}/" | kubectl apply --kubeconfig $(echo ${KUBECONFIG_ENCODED} | base64 --decode) -f -
+    # can kubeconfig be differently set?
+    kustomize build "kube/overlays/${ENV}/" > tmp.yaml
+    cat tmp.yaml
+    kubectl apply -f tmp.yaml
 }
 
 main
