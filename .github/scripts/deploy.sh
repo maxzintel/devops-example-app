@@ -7,6 +7,7 @@
 
 export AWS_REGION='us-east-1'
 export LAST_DEPLOYED_COMMIT
+export KUBECONFIG="($pwd)/kubeconfig"
 
 main() {
     # Add function here to create git ancestry verification.
@@ -14,8 +15,7 @@ main() {
     # Function here to determine which type of branch we are on and thus which vars to use when deploying.
 
     # Grab kubeconfig somehow
-    aws eks update-kubeconfig --name $ENV --role arn:aws:iam::798792373271:role/Admin
-    # do some investigation here to determine file name too long error.
+    aws eks update-kubeconfig --name production --role arn:aws:iam::798792373271:role/Admin --kubeconfig $KUBECONFIG
 
     echo -e "+++ :k8s: Initiating Deploy"
     k8s_deploy
@@ -43,10 +43,7 @@ k8s_deploy() {
     # popd
     cd -
     # build + apply manifest
-    # can kubeconfig be differently set?
-    kustomize build "kube/overlays/${ENV}/" > tmp.yaml
-    cat tmp.yaml
-    # kubectl apply -f tmp.yaml
+    kustomize build "kube/overlays/${ENV}/" | kubectl apply -f -
 }
 
 main
