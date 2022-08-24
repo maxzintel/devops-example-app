@@ -106,9 +106,9 @@ jobs:
         id: deploy_server
         env:
           KUBECONFIG: ${{ secrets.KUBECONFIG }}
-          IMAGE_REPO: $SERVER_REPO
+          IMAGE_REPO: ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-server
           IMAGE_TAG: ${{ runner.os }}-${{ github.run_number }}
-          DEPLOY_RELEASE: ${APP}-${ENV}
+          DEPLOY_RELEASE: chainlink-production
           ENV: production
           APP: chainlink
         run: |
