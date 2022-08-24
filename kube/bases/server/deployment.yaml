@@ -22,7 +22,7 @@ spec:
       serviceAccountName: server
       containers:
         - name: server
-          image: s1dequest/chainlink-server:$TAG_SERVER
+          image: s1dequest/chainlink-server:latest
           command: ["yarn", "start"]
           # envFrom:
           #   - configMapRef:
