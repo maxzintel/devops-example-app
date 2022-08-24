@@ -41,7 +41,7 @@ k8s_deploy() {
 	# 	ENVIRONMENT=staging-${ENV_ID}
 	# EOF
     # popd
-    cd
+    cd -
     # build + apply manifest
     kustomize build "kube/overlays/${ENV}/" # | kubectl apply -f -
 }
