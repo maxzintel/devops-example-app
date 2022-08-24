@@ -105,6 +105,5 @@ jobs:
         id: deploy_server
         env:
           KUBECONFIG: ${{ secrets.KUBECONFIG }}
-        run: |
-          pwd
+        run: sh .github/scripts/hello.sh
 
