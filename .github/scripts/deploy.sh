@@ -25,7 +25,6 @@ main() {
 
 k8s_deploy() {
     echo -e "+++ :k8s: Deploy Env."
-    echo ${ENV}
     cd "kube/overlays/${ENV}/"
     kustomize edit set image "${IMAGE_REPO}=:${IMAGE_TAG}"
     kustomize edit set nameprefix "${DEPLOY_RELEASE}-"
@@ -43,7 +42,7 @@ k8s_deploy() {
     # popd
     cd -
     # build + apply manifest
-    kustomize build "kube/overlays/${ENV}/" | kubectl apply -f -
+    kustomize build "kube/overlays/${ENV}/" | kubectl apply --kubeconfig $(echo ${KUBECONFIG_ENCODED} | base64 --decode) -f -
 }
 
 main
