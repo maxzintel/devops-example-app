@@ -11,7 +11,7 @@ resources:
 vars:
   - fieldref:
       fieldpath: metadata.labels.image_tag
-    name: TAG
+    name: TAG_SERVER
     objref:
       name: server
       apiVersion: apps/v1

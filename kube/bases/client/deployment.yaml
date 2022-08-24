@@ -22,7 +22,7 @@ spec:
       serviceAccountName: client
       containers:
         - name: client
-          image: s1dequest/chainlink-client:$(TAG)
+          image: s1dequest/chainlink-client:$(TAG_CLIENT)
           # envFrom:
           #   - configMapRef:
           #       name: config
