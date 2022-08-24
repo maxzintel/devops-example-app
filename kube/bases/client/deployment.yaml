@@ -31,7 +31,7 @@ spec:
             value: 'bar'
           ports:
             - name: listen
-              containerPort: 80  # HOST PORT IN DOCKER COMPOSE IS 8080 BUT THIS WILL BE URL WHEN INGRRESS IS SET.
+              containerPort: 8000
           resources:
             requests:
               memory: "100M"
