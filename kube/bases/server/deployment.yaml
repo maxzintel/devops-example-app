@@ -35,10 +35,10 @@ spec:
               containerPort: 3030  # Available to all other nodes on the cluster, but does not use 3030 on the actual nodes.
           resources:
             requests:
-              memory: "100M"
+              memory: "512M"
               cpu: "0.25"
             limits:
-              memory: "100M"
+              memory: "512M"
               cpu: "0.25"
           # ADD LIVENESS/READINESS PROBES
           lifecycle:
