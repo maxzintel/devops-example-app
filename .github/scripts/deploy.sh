@@ -15,6 +15,7 @@ main() {
 
     # Grab kubeconfig somehow
     aws eks update-kubeconfig --name $ENV --role arn:aws:iam::798792373271:role/Admin
+    # do some investigation here to determine file name too long error.
 
     echo -e "+++ :k8s: Initiating Deploy"
     k8s_deploy
