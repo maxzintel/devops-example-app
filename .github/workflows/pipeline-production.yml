@@ -112,7 +112,5 @@ jobs:
           ENV: production
           APP: chainlink
         run: |
-          echo $IMAGE_REPO 
-          echo $DEPLOY_RELEASE
-# sh .github/scripts/deploy.sh
+          sh .github/scripts/deploy.sh
 

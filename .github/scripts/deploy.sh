@@ -5,9 +5,6 @@
 # Halt this script on non-zero returns codes
 # and properly pipe failures
 
-export APP=""
-export IMAGE_REPO=""
-
 export AWS_REGION='us-east-1'
 export LAST_DEPLOYED_COMMIT
 
@@ -17,7 +14,7 @@ main() {
     # Function here to determine which type of branch we are on and thus which vars to use when deploying.
 
     # Grab kubeconfig somehow
-    aws eks update-kubeconfig --name production --role arn:aws:iam::798792373271:role/Admin
+    aws eks update-kubeconfig --name $ENV --role arn:aws:iam::798792373271:role/Admin
 
     echo -e "+++ :k8s: Initiating Deploy"
     k8s_deploy
@@ -37,16 +34,16 @@ k8s_deploy() {
     kustomize edit add label -f app:${APP}
 
     # get app secrets, output to temp secrets-gen file we look at in kustomization.yaml
-     > secrets-gen.env
+    #  > secrets-gen.env
 
     # inject necessary dynamic vals to the configmap
-    cat >>config-gen.env <<- EOF
-		ENVIRONMENT=staging-${ENV_ID}
-	EOF
-    popd
+    # cat >>config-gen.env <<- EOF
+	# 	ENVIRONMENT=staging-${ENV_ID}
+	# EOF
+    # popd
 
     # build + apply manifest
-    kustomize build "kube/overlays/${DEPLOY_ENVIRONMENT}/" | kubectl apply -f -
+    kustomize build "kube/overlays/${DEPLOY_ENVIRONMENT}/" # | kubectl apply -f -
 }
 
 main
