@@ -100,17 +100,11 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY }}
           aws-region: us-east-1
-       
-      - name: Test AWS CLI
-        id: aws
-        run: |
-          kubectl
       
-      # - name: Run Deploy Script
-      #   id: deploy_server
-      #   env:
-      #     KUBECONFIG: ${{ secrets.KUBECONFIG }}
-      #   run: |
-      #     echo "$KUBECONFIG" >> $(pwd)/kube
-      #     sh .github/scripts/deploy.sh
+      - name: Run Deploy Script
+        id: deploy_server
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}
+        run: |
+          sh .github/scripts/deploy.sh
 
