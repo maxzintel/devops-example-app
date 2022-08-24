@@ -43,7 +43,7 @@ k8s_deploy() {
     # popd
     cd -
     # build + apply manifest
-    kustomize build "kube/overlays/${ENV}/" # | kubectl apply -f -
+    kustomize build "kube/overlays/${ENV}/" | kubectl apply -f -
 }
 
 main
