@@ -35,7 +35,7 @@ k8s_deploy() {
     cd "kube/overlays/${ENV}/"
     kustomize edit set nameprefix "${DEPLOY_RELEASE}-"
     kustomize edit add label -f release:${DEPLOY_RELEASE}
-    kustomize edit add label -f environment:staging
+    kustomize edit add label -f environment:${ENV}
     kustomize edit add label -f app:${APP}
 
     # get app secrets, output to temp secrets-gen file we look at in kustomization.yaml
