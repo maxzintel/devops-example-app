@@ -104,7 +104,7 @@ jobs:
       - name: Test AWS CLI
         id: aws
         run: |
-          aws s3 ls
+          kubectl
       
       # - name: Run Deploy Script
       #   id: deploy_server
