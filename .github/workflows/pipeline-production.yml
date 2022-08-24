@@ -21,74 +21,74 @@ on:
     - 'releases/**'
 # All jobs run on different VM's, so we do have to repeat some things here.
 jobs:
-  Build_Server:
-    name: 🏢 Build & Push Server Image
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v2.4.2
+  # Build_Server:
+  #   name: 🏢 Build & Push Server Image
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #     - name: Checkout
+  #       id: checkout
+  #       uses: actions/checkout@v2.4.2
 
-      - name: Setup Docker Buildx action
-        id: buildx
-        uses: docker/setup-buildx-action@v1.7.0
-        with:
-          version: latest
+  #     - name: Setup Docker Buildx action
+  #       id: buildx
+  #       uses: docker/setup-buildx-action@v1.7.0
+  #       with:
+  #         version: latest
       
-      - name: Login to Docker Hub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_KEY }}
+  #     - name: Login to Docker Hub
+  #       uses: docker/login-action@v1
+  #       with:
+  #         username: ${{ secrets.DOCKER_HUB_USERNAME }}
+  #         password: ${{ secrets.DOCKER_HUB_ACCESS_KEY }}
 
-      - name: Build and Push Server
-        id: docker_build_server
-        uses: docker/build-push-action@v2
-        with:
-          context: ./server
-          file: ./server/Dockerfile
-          push: true
-          tags: |
-            ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-server:latest
-            ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-server:${{ runner.os }}-${{ github.run_number }}
-            ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-server:${{ runner.os }}-${{ github.sha }}
-          secrets: GIT_AUTH_TOKEN=${{ github.token }}
-  Build_Client:
-    name: 💄 Build & Push Client Image
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v2.4.2
+  #     - name: Build and Push Server
+  #       id: docker_build_server
+  #       uses: docker/build-push-action@v2
+  #       with:
+  #         context: ./server
+  #         file: ./server/Dockerfile
+  #         push: true
+  #         tags: |
+  #           ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-server:latest
+  #           ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-server:${{ runner.os }}-${{ github.run_number }}
+  #           ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-server:${{ runner.os }}-${{ github.sha }}
+  #         secrets: GIT_AUTH_TOKEN=${{ github.token }}
+  # Build_Client:
+  #   name: 💄 Build & Push Client Image
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #     - name: Checkout
+  #       id: checkout
+  #       uses: actions/checkout@v2.4.2
 
-      - name: Setup Docker Buildx action
-        id: buildx
-        uses: docker/setup-buildx-action@v2
-        with:
-          version: latest
+  #     - name: Setup Docker Buildx action
+  #       id: buildx
+  #       uses: docker/setup-buildx-action@v2
+  #       with:
+  #         version: latest
       
-      - name: Login to ECR
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_KEY }}
+  #     - name: Login to ECR
+  #       uses: docker/login-action@v1
+  #       with:
+  #         username: ${{ secrets.DOCKER_HUB_USERNAME }}
+  #         password: ${{ secrets.DOCKER_HUB_ACCESS_KEY }}
 
-      - name: Build and Push client
-        id: docker_build_client
-        uses: docker/build-push-action@v3
-        with:
-          context: ./client
-          file: ./client/Dockerfile
-          push: true
-          tags: |
-            ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-client:latest
-            ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-client:${{ runner.os }}-${{ github.run_number }}
-            ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-client:${{ runner.os }}-${{ github.sha }}
-          secrets: GIT_AUTH_TOKEN=${{ github.token }}
+  #     - name: Build and Push client
+  #       id: docker_build_client
+  #       uses: docker/build-push-action@v3
+  #       with:
+  #         context: ./client
+  #         file: ./client/Dockerfile
+  #         push: true
+  #         tags: |
+  #           ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-client:latest
+  #           ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-client:${{ runner.os }}-${{ github.run_number }}
+  #           ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-client:${{ runner.os }}-${{ github.sha }}
+  #         secrets: GIT_AUTH_TOKEN=${{ github.token }}
   Deploy_Server:
     name: 🚀 Deploy Server to Production
     runs-on: ubuntu-20.04
-    needs: Build_Server
+    # needs: Build_Server
     steps:
       - name: Checkout
         id: checkout
@@ -100,10 +100,17 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY }}
           aws-region: us-east-1
+       
+      - name: Test AWS CLI
+        id: aws
+        run: |
+          aws s3 ls
       
-      - name: Run Deploy Script
-        id: deploy_server
-        env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG }}
-        run: sh .github/scripts/hello.sh
+      # - name: Run Deploy Script
+      #   id: deploy_server
+      #   env:
+      #     KUBECONFIG: ${{ secrets.KUBECONFIG }}
+      #   run: |
+      #     echo "$KUBECONFIG" >> $(pwd)/kube
+      #     sh .github/scripts/deploy.sh
 
