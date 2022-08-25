@@ -48,7 +48,7 @@ k8s_deploy() {
 
     # inject necessary dynamic vals to the configmap(s)
     cat >>client-config-gen.env <<- EOF
-		REACT_BACKEND_URL=${REACT_BACKEND_URL}
+		REACT_APP_BACKEND_URL=${REACT_BACKEND_URL}
 	EOF
     cd -
     # build + apply manifest
