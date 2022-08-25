@@ -1,13 +1,31 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Api, User } from "./services/api";
+// import dotenv from 'dotenv';
+// dotenv.config();
 
 
-declare var process : {
-  env: {
-    REACT_APP_BACKEND_URL: string
+// declare var process : {
+//   env: {
+//     REACT_APP_BACKEND_URL: string
+//   }
+// }
+
+/**
+ * Returns value stored in environment variable with the given `name`.
+ * Throws Error if no such variable or if variable undefined; thus ensuring type-safety.
+ * @param name - name of variable to fetch from this process's environment.
+ */
+export function env(name: string): string {
+  const value = process.env[name];
+
+  if (!value) {
+    throw new Error(`Missing: process.env['${name}'].`);
   }
+
+  return value;
 }
 
+let REACT_APP_BACKEND_URL = env('REACT_APP_BACKEND_URL');
 
 function Visitor() {
   console.log(process.env.REACT_APP_BACKEND_URL);
@@ -79,7 +97,7 @@ function Users() {
 }
 
 const appContext = React.createContext({
-  api: new Api(process.env.REACT_APP_BACKEND_URL || "asdasd"),
+  api: new Api(REACT_APP_BACKEND_URL || "asdasd"),
 });
 
 function App() {
