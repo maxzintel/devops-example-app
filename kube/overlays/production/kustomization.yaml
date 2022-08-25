@@ -9,6 +9,7 @@ commonLabels:
 
 resources:
 - ../../bases/base
+- ingress.yaml
 
 secretGenerator:
   - name: secrets

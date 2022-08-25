@@ -1,7 +1,7 @@
   apiVersion: networking.k8s.io/v1
   kind: Ingress
   metadata:
-    name: client
+    name: app-ingress
   spec:
     ingressClassName: nginx
     rules:
@@ -15,7 +15,8 @@
                   port: 
                     number: 80
               path: /
-      - http:
+      - host: server.quantumwerke.com
+        http:
           paths:
             - pathType: Prefix
               backend:
@@ -23,7 +24,7 @@
                   name: server
                   port: 
                     number: 3030
-              path: /server/
+              path: /
     # # This section is only required if TLS is to be enabled for the Ingress
     # tls:
     #   - hosts:
