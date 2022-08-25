@@ -15,3 +15,8 @@ secretGenerator:
     envs: 
     - secrets-gen.env
     type: Opaque
+
+configMapGenerator:
+  - name: client-config
+    envs:
+    - client-config-gen.env

@@ -115,5 +115,6 @@ jobs:
           RDS_PW: ${{ secrets.RDS_PW }}
           RDS_UN: ${{ secrets.RDS_UN }}
           ELASTICACHE_ENDPOINT: ${{ secrets.ELASTICACHE_ENDPOINT }}
+          REACT_BACKEND_URL: server
         run: |
           sh .github/scripts/deploy.sh

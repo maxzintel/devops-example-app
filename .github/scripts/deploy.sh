@@ -45,12 +45,11 @@ k8s_deploy() {
         TYPEORM_USERNAME=${RDS_UN}
         TYPEORM_PASSWORD=${RDS_PW}
 	EOF
-    #  > secrets-gen.env
 
-    # inject necessary dynamic vals to the configmap
-    # cat >>config-gen.env <<- EOF
-	# 	ENVIRONMENT=staging-${ENV_ID}
-	# EOF
+    # inject necessary dynamic vals to the configmap(s)
+    cat >>client-config-gen.env <<- EOF
+		REACT_BACKEND_URL=${REACT_BACKEND_URL}
+	EOF
     cd -
     # build + apply manifest
     kustomize build "kube/overlays/${ENV}/" | kubectl apply -f -
