@@ -70,7 +70,7 @@ function Users() {
 }
 
 const appContext = React.createContext({
-  api: new Api(process.env.REACT_APP_BACKEND_URL || "localhost"),
+  api: new Api(process.env.REACT_APP_BACKEND_URL || "asdasd"),
 });
 
 function App() {
