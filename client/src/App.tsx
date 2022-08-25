@@ -1,7 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Api, User } from "./services/api";
 
+
+declare var process : {
+  env: {
+    REACT_APP_BACKEND_URL: string
+  }
+}
+
+
 function Visitor() {
+  console.log(process.env.REACT_APP_BACKEND_URL);
   const { api } = useContext(appContext);
   const [visitors, setVisitors] = useState(0);
   async function effect() {
