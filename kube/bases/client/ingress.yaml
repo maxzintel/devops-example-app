@@ -14,7 +14,7 @@
                   name: client
                   port: 
                     number: 80
-              path: /
+              path: /client/
       - host: quantumwerke.com
         http:
           paths:
