@@ -7,4 +7,5 @@ commonLabels:
 bases:
 - ../server
 - ../client
+- ../redis
 
