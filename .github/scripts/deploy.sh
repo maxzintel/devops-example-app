@@ -39,8 +39,10 @@ k8s_deploy() {
     kustomize edit add label -f app:${APP}
 
     # get app secrets, output to temp secrets-gen file we look at in kustomization.yaml
+
+    # TRY USING THE REDIS CONFIG IN THIS REPO!
     cat >>secrets-gen.env <<- EOF
-		REDIS_HOST=${ELASTICACHE_ENDPOINT}
+		REDIS_HOST=${ELASTICACHE_ENDPOINT}/1
         TYPEORM_HOST=${RDS_ENDPOINT}
         TYPEORM_USERNAME=${RDS_UN}
         TYPEORM_PASSWORD=${RDS_PW}
