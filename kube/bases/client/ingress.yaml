@@ -5,7 +5,7 @@
   spec:
     ingressClassName: nginx
     rules:
-      - host: quantumwerke.com
+      - host: client.quantumwerke.com
         http:
           paths:
             - pathType: Prefix
@@ -14,9 +14,8 @@
                   name: client
                   port: 
                     number: 80
-              path: /client/
-      - host: quantumwerke.com
-        http:
+              path: /
+      - http:
           paths:
             - pathType: Prefix
               backend:
