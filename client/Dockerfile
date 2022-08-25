@@ -2,6 +2,7 @@
 # Parent Imnage.
 FROM node:12-alpine as build
 # Add below back for local dev!
+ENV REACT_APP_BACKEND_URL=chainlink-production-server
 # ENV REACT_APP_BACKEND_URL=http://localhost:3030/
 # Modify parent image - add code directory.
 WORKDIR /app
