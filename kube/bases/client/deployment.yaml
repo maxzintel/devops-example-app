@@ -23,9 +23,9 @@ spec:
       containers:
         - name: client
           image: s1dequest/chainlink-client:latest
-          envFrom:
-            - configMapRef:
-                name: client-config
+          # envFrom:
+          #   - configMapRef:
+          #       name: client-config
           ports:
             - name: listen
               containerPort: 80
