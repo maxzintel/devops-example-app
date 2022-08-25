@@ -1,14 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Api, User } from "./services/api";
-// import dotenv from 'dotenv';
-// dotenv.config();
-
-
-// declare var process : {
-//   env: {
-//     REACT_APP_BACKEND_URL: string
-//   }
-// }
 
 /**
  * Returns value stored in environment variable with the given `name`.
