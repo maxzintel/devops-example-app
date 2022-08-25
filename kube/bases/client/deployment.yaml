@@ -31,7 +31,7 @@ spec:
             value: 'bar'
           ports:
             - name: listen
-              containerPort: 8000
+              containerPort: 80
           resources:
             requests:
               memory: "100M"
