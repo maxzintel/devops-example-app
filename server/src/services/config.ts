@@ -25,7 +25,7 @@ export async function getConfig(): Promise<AppConfig> {
     redis: {
       host: process.env.REDIS_HOST || "localhost",
       port: parseInt(process.env.REDIS_PORT) || 6379,
-      password: process.env.REDIS_PASSWORD,
+      // password: process.env.REDIS_PASSWORD,
     },
     server: {
       port: parseInt(process.env.PORT) || 3030,
