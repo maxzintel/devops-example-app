@@ -15,7 +15,7 @@ spec:
       containers:
       - name: redis
         image: redis:5-alpine
-        command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+        # command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
         resources:
           requests:
             memory: "512M"
