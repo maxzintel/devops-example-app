@@ -55,6 +55,5 @@ async function getDbConfig(): Promise<PostgresConnectionOptions> {
       }
     }
   }
-
   return connectionOptions;
 }
