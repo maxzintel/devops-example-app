@@ -47,9 +47,9 @@ k8s_deploy() {
 	EOF
 
     # inject necessary dynamic vals to the configmap(s)
-    cat >>client-config-gen.env <<- EOF
-		REACT_APP_BACKEND_URL=${REACT_BACKEND_URL}
-	EOF
+    # cat >>client-config-gen.env <<- EOF
+	# 	REACT_APP_BACKEND_URL=${REACT_BACKEND_URL}
+	# EOF
     cd -
     # build + apply manifest
     kustomize build "kube/overlays/${ENV}/" | kubectl apply -f -

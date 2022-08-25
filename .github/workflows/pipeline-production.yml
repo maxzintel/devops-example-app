@@ -77,6 +77,8 @@ jobs:
       - name: Build and Push client
         id: docker_build_client
         uses: docker/build-push-action@v3
+        env:
+          REACT_APP_BACKEND_URL: server
         with:
           context: ./client
           file: ./client/Dockerfile
