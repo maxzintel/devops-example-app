@@ -9,8 +9,8 @@ spec:
   type: ClusterIP
   ports:
   - protocol: TCP
-    port: 3030
+    port: 80
     name: server
-    targetPort: 3030
+    targetPort: 80
   selector:
     component: server

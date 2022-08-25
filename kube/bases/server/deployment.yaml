@@ -29,7 +29,7 @@ spec:
                 name: secrets # Patched in at overlay level. Created by temp file at deploy.
           ports:
             - name: listen
-              containerPort: 3030  # Available to all other nodes on the cluster, but does not use 3030 on the actual nodes.
+              containerPort: 80  # Available to all other nodes on the cluster, but does not use 3030 on the actual nodes.
           resources:
             requests:
               memory: "512M"
