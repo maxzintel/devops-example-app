@@ -14,7 +14,7 @@ export interface ServerConfig {
 interface RedisConfig {
   host: string;
   port: number;
-  password: string;
+  // password: string;
 }
 
 type Writeable<T> = { -readonly [P in keyof T]: T[P] };
