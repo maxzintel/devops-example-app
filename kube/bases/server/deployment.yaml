@@ -23,7 +23,7 @@ spec:
       containers:
         - name: server
           image: s1dequest/chainlink-server:latest
-          command: ["yarn", "AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"]
+          command: ["yarn", "start"]
           envFrom:
             - secretRef:
                 name: secrets # Patched in at overlay level. Created by temp file at deploy.

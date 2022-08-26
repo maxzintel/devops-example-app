@@ -111,3 +111,9 @@ jobs:
           REACT_BACKEND_URL: server
         run: |
           bash .github/scripts/deploy.sh
+
+      - name: Monitor and Rollback on Error
+        id: monitor_and_rollback
+        run: |
+          bash .github/scripts/monitor.sh
+
