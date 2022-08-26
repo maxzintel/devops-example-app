@@ -28,3 +28,9 @@ The 4 above services need to communicate to each other, and be orchestrated via 
 - How would you make final image size smaller?
 - What steps should be taken to make subsequent builds faster?
 - What could you do you have greater network isolation between services?
+
+
+- Staging Deployment Description
+- Decouple the Repo (Client and Server) to mitigate build congestion
+- Make action pipelines more DRY
+- Figure out how to get the Server connected to ElastiCache

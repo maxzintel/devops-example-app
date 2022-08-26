@@ -5,10 +5,10 @@ env:
 name: 🧱 Prod CI/CD Pipeline
 on: 
   push:
-    paths:
-    - 'server/**'
-    - 'client/**'
-    - 'kube/**'
+    # paths:
+    # - 'server/**'
+    # - 'client/**'
+    # - 'kube/**'
     branches:
     - main
 # All jobs run on different VM's, so we do have to repeat some things here.

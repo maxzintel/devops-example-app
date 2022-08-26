@@ -20,8 +20,10 @@ main() {
     echo -e "+++ :k8s: Initiating Deploy"
     k8s_deploy
 
-    # echo -e "+++ :k8s: Monitor Rollout"
-    # kubectl rollout status "deployment/${DEPLOY_RELEASE}-server"
+    echo -e "+++ :k8s: Monitor Rollout"
+    kubectl rollout status "deployment/${DEPLOY_RELEASE}-server"
+    kubectl rollout status "deployment/${DEPLOY_RELEASE}-client"
+    kubectl rollout status "deployment/${DEPLOY_RELEASE}-redis"
 }
 
 k8s_deploy() {
