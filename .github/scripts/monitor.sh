@@ -6,6 +6,8 @@ export KUBECONFIG="$(pwd)/kubeconfig"
 
 aws eks update-kubeconfig --name ${ENV} --role arn:aws:iam::798792373271:role/Admin --kubeconfig $KUBECONFIG
 
+ROLLED_BACK="False"
+
 export TIME=0
 while [ $TIME -le 30 ]; do
     echo "waiting for 10s..."
@@ -17,7 +19,7 @@ while [ $TIME -le 30 ]; do
         if ! kubectl rollout status deployment ${deployment} --timeout=10s 1>/dev/null 2>&1; then
             echo "Error: ${deployment} - rolling back!"
             kubectl rollout undo deployment ${deployment}
-            export ROLLBACK_OCCURRED="True"
+            export ROLLED_BACK="True"
         else
             echo "Ok: ${deployment}"
         fi
