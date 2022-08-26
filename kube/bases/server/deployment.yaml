@@ -9,7 +9,7 @@ spec:
   strategy:
     type: RollingUpdate
     rollingUpdate: # Below settings are not ideal for real production app.
-      maxUnavailable: 100%
+      maxUnavailable: 50%
       maxSurge: 100%
   selector:
     matchLabels:

@@ -98,7 +98,7 @@ jobs:
         id: get_pr_number
         run: |
           export PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
-          echo $PR_NUMBER >> $GITHUB_ENV
+          echo "PR_NUMBER=${PR_NUMBER}" >> $GITHUB_ENV
 
       - name: Run Deploy Script
         id: deploy_app
