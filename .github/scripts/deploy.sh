@@ -61,7 +61,7 @@ k8s_deploy() {
     if [[ ${DEPLOY_RELEASE:-x} == "chainlink-production" ]]; then
         kustomize build "kube/overlays/${ENV}/" | kubectl apply -f -
     else 
-        echo $DEPLOY_RELEASE
+        kustomize build "kube/overlays/${ENV}/"
     fi
 }
 
