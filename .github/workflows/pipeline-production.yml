@@ -103,7 +103,7 @@ jobs:
           IMAGE_REPO_SERVER: ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-server
           IMAGE_REPO_CLIENT: ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-client
           IMAGE_TAG: ${{ runner.os }}-${{ github.sha }}
-          DEPLOY_RELEASE: ${{ env.ENV }}-${{ env.APP }}
+          DEPLOY_RELEASE: ${{ env.APP }}-${{ env.ENV }}
           ENV: ${{ env.ENV }}
           APP: ${{ env.APP }}
           RDS_ENDPOINT: ${{ secrets.RDS_ENDPOINT }}
