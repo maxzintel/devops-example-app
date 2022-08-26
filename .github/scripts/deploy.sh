@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -eou pipefail
 # A script that handles deploying to staging and production dynamically.
 
 # Halt this script on non-zero returns codes
