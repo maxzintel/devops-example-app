@@ -1,8 +1,14 @@
 #!/bin/bash
+
 set -eou pipefail
 
-while true; do
-    sleep 20
+aws eks update-kubeconfig --name ${ENV} --role arn:aws:iam::798792373271:role/Admin --kubeconfig $KUBECONFIG
+
+export TIME=0
+while [ $TIME -le 30 ]; do
+    echo "waiting for 10s..."
+    sleep 10
+    export TIME=$(( $TIME + 10 ))
     deployments=$(kubectl get deployments --no-headers -o custom-columns=":metadata.name")
     echo "====== $(date) ======"
     for deployment in ${deployments}; do
