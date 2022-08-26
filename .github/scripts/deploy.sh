@@ -62,6 +62,7 @@ k8s_deploy() {
         kustomize build "kube/overlays/${ENV}/" | kubectl apply -f -
     else 
         echo $DEPLOY_RELEASE
+    fi
 }
 
 main
