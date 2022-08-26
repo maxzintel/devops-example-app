@@ -56,7 +56,12 @@ k8s_deploy() {
 	# EOF
     cd -
     # build + apply manifest
-    kustomize build "kube/overlays/${ENV}/" | kubectl apply -f -
+    # IF we are deploying to production, run kubectl apply.
+    # Else, this is staging, and we just want to output the manifests for now.
+    if [[ ${DEPLOY_RELEASE:-x} == "chainlink-production" ]]; then
+        kustomize build "kube/overlays/${ENV}/" | kubectl apply -f -
+    else 
+        echo $DEPLOY_RELEASE
 }
 
 main
