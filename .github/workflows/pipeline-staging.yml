@@ -105,7 +105,7 @@ jobs:
         env:
           IMAGE_REPO_SERVER: ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-server
           IMAGE_REPO_CLIENT: ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-client
-          IMAGE_TAG: ${{ runner.os }}-${{ github.run_number }}
+          IMAGE_TAG: ${{ runner.os }}-${{ github.sha }}
           DEPLOY_RELEASE: chainlink-pr${{ env.PR_NUMBER }}
           ENV: staging
           APP: chainlink
