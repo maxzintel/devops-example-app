@@ -9,7 +9,7 @@ spec:
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxUnavailable: 100%
+      maxUnavailable: 50%
       maxSurge: 100%
   selector:
     matchLabels:
@@ -25,13 +25,10 @@ spec:
           image: s1dequest/chainlink-client:latest
           # envFrom:
           #   - configMapRef:
-          #       name: config
-          env:
-          - name: foo
-            value: 'bar'
+          #       name: client-config
           ports:
             - name: listen
-              containerPort: 80  # HOST PORT IN DOCKER COMPOSE IS 8080 BUT THIS WILL BE URL WHEN INGRRESS IS SET.
+              containerPort: 80
           resources:
             requests:
               memory: "100M"

@@ -35,20 +35,34 @@ k8s_deploy() {
     cd "kube/overlays/${ENV}/"
     kustomize edit set nameprefix "${DEPLOY_RELEASE}-"
     kustomize edit add label -f release:${DEPLOY_RELEASE}
-    kustomize edit add label -f environment:staging
+    kustomize edit add label -f environment:${ENV}
     kustomize edit add label -f app:${APP}
 
     # get app secrets, output to temp secrets-gen file we look at in kustomization.yaml
-    #  > secrets-gen.env
 
-    # inject necessary dynamic vals to the configmap
-    # cat >>config-gen.env <<- EOF
-	# 	ENVIRONMENT=staging-${ENV_ID}
+    # TRY USING THE REDIS CONFIG IN THIS REPO!
+    # REDIS_HOST=${ELASTICACHE_ENDPOINT}/0
+
+    cat >>secrets-gen.env <<- EOF
+        REDIS_HOST=${DEPLOY_RELEASE}-redis
+        TYPEORM_HOST=${RDS_ENDPOINT}
+        TYPEORM_USERNAME=${RDS_UN}
+        TYPEORM_PASSWORD=${RDS_PW}
+	EOF
+
+    # inject necessary dynamic vals to the configmap(s)
+    # cat >>client-config-gen.env <<- EOF
+	# 	REACT_APP_BACKEND_URL=${REACT_BACKEND_URL}
 	# EOF
-    # popd
     cd -
     # build + apply manifest
-    kustomize build "kube/overlays/${ENV}/" | kubectl apply -f -
+    # IF we are deploying to production, run kubectl apply.
+    # Else, this is staging, and we just want to output the manifests for now.
+    if [[ ${DEPLOY_RELEASE:-x} == "chainlink-production" ]]; then
+        kustomize build "kube/overlays/${ENV}/" | kubectl apply -f -
+    else 
+        kustomize build "kube/overlays/${ENV}/"
+    fi
 }
 
 main

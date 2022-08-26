@@ -2,7 +2,7 @@ env:
   branch: ${{ github.head_ref || github.ref_name }}
   SERVER_REPO: ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-server
 
-name: 🧱 CI/CD Pipeline
+name: 🧱 Prod CI/CD Pipeline
 on: 
   push:
     paths:
@@ -11,15 +11,6 @@ on:
     - 'kube/**'
     branches:
     - main
-  # Remove blow for prod pipeline, remove above for staging pipeline.
-  pull_request:
-    paths:
-    - 'server/**'
-    - 'client/**'
-    - 'kube/**'
-    branches:
-    - main
-    - 'releases/**'
 # All jobs run on different VM's, so we do have to repeat some things here.
 jobs:
   Build_Server:
@@ -77,6 +68,8 @@ jobs:
       - name: Build and Push client
         id: docker_build_client
         uses: docker/build-push-action@v3
+        env:
+          REACT_APP_BACKEND_URL: server
         with:
           context: ./client
           file: ./client/Dockerfile
@@ -107,9 +100,14 @@ jobs:
         env:
           IMAGE_REPO_SERVER: ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-server
           IMAGE_REPO_CLIENT: ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-client
-          IMAGE_TAG: ${{ runner.os }}-${{ github.run_number }}
+          IMAGE_TAG: ${{ runner.os }}-${{ github.sha }}
           DEPLOY_RELEASE: chainlink-production
           ENV: production
           APP: chainlink
+          RDS_ENDPOINT: ${{ secrets.RDS_ENDPOINT }}
+          RDS_PW: ${{ secrets.RDS_PW }}
+          RDS_UN: ${{ secrets.RDS_UN }}
+          ELASTICACHE_ENDPOINT: ${{ secrets.ELASTICACHE_ENDPOINT }}
+          REACT_BACKEND_URL: server
         run: |
           sh .github/scripts/deploy.sh

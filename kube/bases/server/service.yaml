@@ -3,11 +3,14 @@ apiVersion: v1
 kind: Service
 metadata:
   name: server
+  labels:
+    component: server
 spec:
   type: ClusterIP
   ports:
   - protocol: TCP
     port: 3030
     name: server
+    targetPort: 3030
   selector:
     component: server

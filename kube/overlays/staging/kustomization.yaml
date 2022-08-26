@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# This will be updated as a part of the deploy script.
+namePrefix: chainlink-PLACEHOLDER-
+
+commonLabels:
+  environment: staging
+  app: chainlink
+
+resources:
+- ../../bases/base
+- ingress.yaml
+
+secretGenerator:
+  - name: secrets
+    envs: 
+    - secrets-gen.env
+    type: Opaque
+
+# configMapGenerator:
+#   - name: client-config
+#     envs:
+#     - client-config-gen.env

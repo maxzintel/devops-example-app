@@ -8,8 +8,8 @@ spec:
   replicas: 2
   strategy:
     type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 100%
+    rollingUpdate: # Below settings are not ideal for real production app.
+      maxUnavailable: 50%
       maxSurge: 100%
   selector:
     matchLabels:
@@ -24,21 +24,18 @@ spec:
         - name: server
           image: s1dequest/chainlink-server:latest
           command: ["yarn", "start"]
-          # envFrom:
-          #   - configMapRef:
-          #       name: config
-          env:
-          - name: foo
-            value: 'bar'
+          envFrom:
+            - secretRef:
+                name: secrets # Patched in at overlay level. Created by temp file at deploy.
           ports:
             - name: listen
               containerPort: 3030  # Available to all other nodes on the cluster, but does not use 3030 on the actual nodes.
           resources:
             requests:
-              memory: "512M"
+              memory: "1Gi"
               cpu: "0.25"
             limits:
-              memory: "512M"
+              memory: "1Gi"
               cpu: "0.25"
           # ADD LIVENESS/READINESS PROBES
           lifecycle:

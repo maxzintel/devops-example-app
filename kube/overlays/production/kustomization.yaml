@@ -9,8 +9,15 @@ commonLabels:
 
 resources:
 - ../../bases/base
+- ingress.yaml
+
+secretGenerator:
+  - name: secrets
+    envs: 
+    - secrets-gen.env
+    type: Opaque
 
 # configMapGenerator:
-#   - name: config-server
-#     literals:
-#     - 
+#   - name: client-config
+#     envs:
+#     - client-config-gen.env

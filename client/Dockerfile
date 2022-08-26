@@ -1,7 +1,9 @@
 # syntax=docker/dockerfile:1
 # Parent Imnage.
 FROM node:12-alpine as build
-ENV REACT_APP_BACKEND_URL=http://localhost:3030/
+# Add below back for local dev!
+ENV REACT_APP_BACKEND_URL=http://server.quantumwerke.com/
+# ENV REACT_APP_BACKEND_URL=http://localhost:3030/
 # Modify parent image - add code directory.
 WORKDIR /app
 COPY . .

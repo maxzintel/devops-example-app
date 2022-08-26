@@ -14,7 +14,8 @@ export interface ServerConfig {
 interface RedisConfig {
   host: string;
   port: number;
-  password: string;
+  // family: number;
+  // password: string;
 }
 
 type Writeable<T> = { -readonly [P in keyof T]: T[P] };
@@ -25,7 +26,8 @@ export async function getConfig(): Promise<AppConfig> {
     redis: {
       host: process.env.REDIS_HOST || "localhost",
       port: parseInt(process.env.REDIS_PORT) || 6379,
-      password: process.env.REDIS_PASSWORD,
+      // family: 6
+      // password: process.env.REDIS_PASSWORD,
     },
     server: {
       port: parseInt(process.env.PORT) || 3030,
@@ -55,6 +57,5 @@ async function getDbConfig(): Promise<PostgresConnectionOptions> {
       }
     }
   }
-
   return connectionOptions;
 }
