@@ -8,7 +8,7 @@ set -eou pipefail
 
 export AWS_REGION='us-east-1'
 export LAST_DEPLOYED_COMMIT
-export KUBECONFIG="($pwd)/kubeconfig"
+export KUBECONFIG="$(pwd)/kubeconfig"
 
 main() {
     # Add function here to create git ancestry verification.
