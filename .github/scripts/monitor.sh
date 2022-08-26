@@ -2,6 +2,8 @@
 
 set -eou pipefail
 
+export KUBECONFIG="$(pwd)/kubeconfig"
+
 aws eks update-kubeconfig --name ${ENV} --role arn:aws:iam::798792373271:role/Admin --kubeconfig $KUBECONFIG
 
 export TIME=0
