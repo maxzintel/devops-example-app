@@ -17,8 +17,14 @@ while [ $TIME -le 30 ]; do
         if ! kubectl rollout status deployment ${deployment} --timeout=10s 1>/dev/null 2>&1; then
             echo "Error: ${deployment} - rolling back!"
             kubectl rollout undo deployment ${deployment}
+            export ROLLBACK_OCCURRED="True"
         else
             echo "Ok: ${deployment}"
         fi
     done
 done
+
+if [ $ROLLBACK_OCCURRED == "True" ]; then
+  echo "== A ROLLBACK OCCURRED. FORCING FAILURE OF PIPELINE FOR VISIBILITY. =="
+  exit 1
+fi
