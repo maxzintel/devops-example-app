@@ -34,3 +34,4 @@ The 4 above services need to communicate to each other, and be orchestrated via 
 - Decouple the Repo (Client and Server) to mitigate build congestion
 - Make action pipelines more DRY
 - Figure out how to get the Server connected to ElastiCache
+- Figure out how to automate full revert PR's
