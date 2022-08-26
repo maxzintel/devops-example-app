@@ -115,4 +115,4 @@ jobs:
           ELASTICACHE_ENDPOINT: ${{ secrets.ELASTICACHE_ENDPOINT }}
           REACT_BACKEND_URL: server
         run: |
-          sh .github/scripts/deploy.sh
+          bash .github/scripts/deploy.sh
