@@ -2,15 +2,16 @@ env:
   branch: ${{ github.head_ref || github.ref_name }}
   SERVER_REPO: ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-server
 
-name: 🧱 Prod CI/CD Pipeline
+name: 🧱 Staging CI/CD Pipeline
 on: 
-  push:
+  pull_request:
     paths:
     - 'server/**'
     - 'client/**'
     - 'kube/**'
     branches:
     - main
+    - 'releases/**'
 # All jobs run on different VM's, so we do have to repeat some things here.
 jobs:
   Build_Server:
@@ -41,7 +42,6 @@ jobs:
           file: ./server/Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-server:latest
             ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-server:${{ runner.os }}-${{ github.run_number }}
             ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-server:${{ runner.os }}-${{ github.sha }}
           secrets: GIT_AUTH_TOKEN=${{ github.token }}
@@ -75,12 +75,11 @@ jobs:
           file: ./client/Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-client:latest
             ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-client:${{ runner.os }}-${{ github.run_number }}
             ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-client:${{ runner.os }}-${{ github.sha }}
           secrets: GIT_AUTH_TOKEN=${{ github.token }}
   Deploy_App:
-    name: 🚀 Deploy to Production
+    name: 🚀 Deploy to Staging
     runs-on: ubuntu-20.04
     needs: [ Build_Server, Build_Client ]
     steps:
@@ -95,19 +94,25 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY }}
           aws-region: us-east-1
       
-      - name: Run Deploy Script
-        id: deploy_app
-        env:
-          IMAGE_REPO_SERVER: ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-server
-          IMAGE_REPO_CLIENT: ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-client
-          IMAGE_TAG: ${{ runner.os }}-${{ github.run_number }}
-          DEPLOY_RELEASE: chainlink-production
-          ENV: production
-          APP: chainlink
-          RDS_ENDPOINT: ${{ secrets.RDS_ENDPOINT }}
-          RDS_PW: ${{ secrets.RDS_PW }}
-          RDS_UN: ${{ secrets.RDS_UN }}
-          ELASTICACHE_ENDPOINT: ${{ secrets.ELASTICACHE_ENDPOINT }}
-          REACT_BACKEND_URL: server
+      - name: Get PR Number
+        id: get_pr_number
         run: |
-          sh .github/scripts/deploy.sh
+          export PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+          echo $PR_NUMBER
+
+      # - name: Run Deploy Script
+      #   id: deploy_app
+      #   env:
+      #     IMAGE_REPO_SERVER: ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-server
+      #     IMAGE_REPO_CLIENT: ${{ secrets.DOCKER_HUB_USERNAME }}/chainlink-client
+      #     IMAGE_TAG: ${{ runner.os }}-${{ github.run_number }}
+      #     DEPLOY_RELEASE: chainlink-
+      #     ENV: staging
+      #     APP: chainlink
+      #     RDS_ENDPOINT: ${{ secrets.RDS_ENDPOINT }}
+      #     RDS_PW: ${{ secrets.RDS_PW }}
+      #     RDS_UN: ${{ secrets.RDS_UN }}
+      #     ELASTICACHE_ENDPOINT: ${{ secrets.ELASTICACHE_ENDPOINT }}
+      #     REACT_BACKEND_URL: server
+      #   run: |
+      #     sh .github/scripts/deploy.sh
