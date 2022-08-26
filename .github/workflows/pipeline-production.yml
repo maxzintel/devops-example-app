@@ -116,6 +116,8 @@ jobs:
 
       - name: Monitor and Rollback on Error
         id: monitor_and_rollback
+        env:
+          ENV: ${{ env.ENV }}
         run: |
           bash .github/scripts/monitor.sh
 
