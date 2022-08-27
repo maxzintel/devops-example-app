@@ -14,7 +14,7 @@ on:
     - main
 # All jobs run on different VM's, so we do have to repeat some things here.
 jobs:
-  Build_Server:
+  Build_Images:
     name: 🏢 Build & Push Images
     runs-on: ubuntu-20.04
     steps:
@@ -64,7 +64,7 @@ jobs:
   Deploy_App:
     name: 🚀 Deploy to Production
     runs-on: ubuntu-20.04
-    needs: [ Build_Server, Build_Client ]
+    needs: [ Build_Images ]
     steps:
       - name: Checkout
         id: checkout
