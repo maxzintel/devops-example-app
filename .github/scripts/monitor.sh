@@ -26,7 +26,7 @@ while [ $TIME -le 30 ]; do
     done
 done
 
-if [ $ROLLBACK_OCCURRED == "True" ]; then
+if [ $ROLLED_BACK == "True" ]; then
   echo "== A ROLLBACK OCCURRED. FORCING FAILURE OF PIPELINE FOR VISIBILITY. =="
   exit 1
 fi
