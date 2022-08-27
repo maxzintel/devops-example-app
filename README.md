@@ -96,6 +96,56 @@ Once the database is created, we would trigger the Kubernetes deploymnent. Anoth
 
 ### The `kube` Directory
 
+Let's move on to the Kubernetes bits! Directory structure:
+
+```txt
+kube
+  ├─bases
+  |   ├─base
+  |   ├─client
+  |   ├─redis
+  |   └─server
+  └─overlays
+      ├─production
+      └─staging
+```
+
+The reason its structured like this is that we are using a tool called 'Kustomize' to keep our manifests as DRY, explicit, and maintainable as possible.
+
+The bases are the bones of the resources we are deploying. They contain the applcation specific resources we want to deploy with a `kustomization.yaml` file that tells kubectl which files we want to include when referencing this base.
+
+The base within bases grabs all of those application specific objects and adds any high level common labels.
+
+The overlays are environment specific. In this case, we have staging and production overlays, but in practice we may also want one called `beta` that includes special ingress objects defining a canary deployment to a new, higher risk, version of the application. These overlays are where we would utilize the kustomize resources `patches` and `generators`.
+
+We don't have any patches currently, but I'll discuss a use case and example of one for posterity. Let's say in production our deployments have a ton of traffic and thus need a lot of scale. To create this scale, we set the replica count in our deployments to 50, telling the K8s API to deploy and maintain 50 pods for these deployments. It is almost certain, however, that we don't need that much scale in staging. If this is true, we can use a patch to set that in the staging environment specifically in a simple, semi-declarative way. In `kube/overlays/staging/` we would create a file called `patch-replicas.yml` and in it add:
+
+```yml
+- op: replace
+  path: /spec/replicas
+  value: 2
+```
+
+Then, in `kube/overlays/staging/kustomization.yml` we define what resources to apply this patch to with:
+
+```yml
+patchesJson6902:
+- path: patch-replicas.yml
+  target:
+    group: apps
+    version: v1
+    kind: Deployment
+    name: server
+- path: patch-replicas.yml
+  target:
+    group: apps
+    version: v1
+    kind: Deployment
+    name: client
+```
+
+One thing to keep in mind for this example is ensuring our rolloutStrategy settings do not inhibit us from deploying to staging here. If they do, either change the replica count to a value that works with the percentages in the strategy or add a patch for the strategy as well!
+
 Imperative construction of pipeline files to maintain DRY and composable code.
 
 
