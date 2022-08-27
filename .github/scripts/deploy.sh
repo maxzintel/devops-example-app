@@ -1,34 +1,24 @@
 #!/bin/bash
 
-set -eou pipefail
-# A script that handles deploying to staging and production dynamically.
-
 # Halt this script on non-zero returns codes
 # and properly pipe failures
+set -eou pipefail
+
+# A script that handles deploying to staging and production dynamically.
 
 export AWS_REGION='us-east-1'
 export LAST_DEPLOYED_COMMIT
 export KUBECONFIG="$(pwd)/kubeconfig"
 
 main() {
-    # Add function here to create git ancestry verification.
-
-    # Function here to determine which type of branch we are on and thus which vars to use when deploying.
-
-    # Grab kubeconfig somehow
+    # Grab kubeconfig. NOTE AWS Account number would be dynamic when we setup Staging.
     aws eks update-kubeconfig --name ${ENV} --role arn:aws:iam::798792373271:role/Admin --kubeconfig $KUBECONFIG
 
-    echo -e "+++ :k8s: Initiating Deploy"
+    echo -e "== Initiating Deploy =="
     k8s_deploy
-
-    # echo -e "+++ :k8s: Monitor Rollout"
-    # kubectl rollout status "deployment/${DEPLOY_RELEASE}-server"
-    # kubectl rollout status "deployment/${DEPLOY_RELEASE}-client"
-    # kubectl rollout status "deployment/${DEPLOY_RELEASE}-redis"
 }
 
 k8s_deploy() {
-    echo -e "+++ :k8s: Deploy Env."
     cd "kube/bases/server/"
     kustomize edit set image "${IMAGE_REPO_SERVER}=:${IMAGE_TAG}"
     cd -
