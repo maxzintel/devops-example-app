@@ -75,9 +75,9 @@ Now, let's chat about the `pipeline-staging.yml` file. This was a stretch goal I
 
 ### Staging Deployments: How They Would Work
 
-This workflow is a lot like the production one, but has some key differences. First, its only triggered when changes are made to directories relevant to actually building and deploying the application(s). Next, the deploy job includes a quick script to grab the PR Number to inject it into our Kubernetes resources later.
+This workflow is a lot like the production one, but has some key differences. First, its only triggered when changes are made to directories relevant to actually building and deploying the application(s) when a PR is opened against main. Next, the deploy job includes a quick script to grab the PR Number to inject it into our Kubernetes resources later.
 
-To get this working well, we'd need to do a lot on the terraform and infrastructure side. The most secure way would be a separate AWS account. The thing to focus on when setting up resources here would be maintaining environment parity as much as possible. This would mean heavy utilization of re-usable modules in terraform for both the prod and staging accounts such that, most (or all) of the time, there is a single point of truth for all settings across both accounts. This ensures the staging environments we do test and QA work on are as similar to production as possible, minimizing surprises and maintenance complexity.
+To get this working well, we'd need to do a lot on the terraform/infrastructure side. The most secure way would be a separate AWS account and the thing to focus on when setting up resources here would be maintaining environment parity as much as possible. This would mean heavy utilization of re-usable modules in terraform for both the prod and staging accounts such that, most (or all) of the time, there is a single point of truth for all settings across both accounts. This ensures the staging environments we do test and QA work on are as similar to production as possible, minimizing surprises and maintenance complexity. The module would need to create (among other things) an A record, specific to the PR, pointed at the Staging EKS cluster's load balancer for the client and server hosts.
 
 To implement statefulness we'd again want to focus on parity. Here though it is a bit more of a challenge. We'd want to setup a (probably daily) cronjob that clones the production database and both trims its data to reduce size anonymizes it somehow. There are some tools for this, one my team has used in the past is called Tonic. That clone should then be made available to the staging account such that we may create and update daily a 'default' database in the Staging RDS instance. Then, using a Terraform module and GitHub workflow, when each environment is staged we would trigger an environment specific database creation for that environment. Looking something like this:
 
@@ -116,7 +116,7 @@ The bases are the bones of the resources we are deploying. They contain the appl
 
 The base within bases grabs all of those application specific objects and adds any high level common labels.
 
-The overlays are environment specific. In this case, we have staging and production overlays, but in practice we may also want one called `beta` that includes special ingress objects defining a canary deployment to a new, higher risk, version of the application. These overlays are where we would utilize the kustomize resources `patches` and `generators`.
+The overlays are environment specific. In this case, we have staging and production overlays, but in practice we may also want one called `beta` that includes special ingress objects defining a canary deployment to a new, higher risk, version of the application. These overlays are where we would utilize the kustomize resources `patches`, `generators`, and `vars`.
 
 We don't have any patches currently, but I'll discuss a use case and example of one for posterity. Let's say in production our deployments have a ton of traffic and thus need a lot of scale. To create this scale, we set the replica count in our deployments to 50, telling the K8s API to deploy and maintain 50 pods for these deployments. It is almost certain, however, that we don't need that much scale in staging. If this is true, we can use a patch to set that in the staging environment specifically in a simple, semi-declarative way. In `kube/overlays/staging/` we would create a file called `patch-replicas.yml` and in it add:
 
@@ -146,6 +146,24 @@ patchesJson6902:
 
 One thing to keep in mind for this example is ensuring our rolloutStrategy settings do not inhibit us from deploying to staging here. If they do, either change the replica count to a value that works with the percentages in the strategy or add a patch for the strategy as well!
 
+The second kustomize feature I mentioned, `generators`, is used to create configMaps and secrets for your deployments. In our case, we append the temp `secrets-gen.env` file we created in the deploy script to an otherwise empty secret, then reference it as the environment in our deployment manifests.
+
+The third and last kustomize feature I will describe is `vars`. If you look in the staging overlay kustomization file there's a good example of this. Kustomize is generally good at knowing how to combine names, prefixes, labels, etc... in your objects automatically. However, one place where it doesn't (and we need it to to deploy to staging) is in `kube/overlays/staging/ingress.yml`. Here, we need the Ingress `host` to set it self up to handle requests for the aforementioned A records we'd automatically create as a part of the staging deploy. To do this, we tell Kustomize (using the vars object) to replace anywhere it sees `$(DEPLOY_RELEASE)` in the manifests with the value it reads from the label: `release` on the client deployment (which we set = to `pr${{ env.PR_NUMBER }}` in the CI/CD).
+
+## The Terraform
+
+As a reminder this is all contained in the other repository: `maxzintel/chainlink-infra`. The reason I separated these is that most of the resources in here are generic to the account, and not specific to the application deployment. Thus in a realistic situation, we wouldn't want them to reside in the same repository most likely.
+
+This repository is pretty basic. It has no automated CI/CD (I just dealt with remote state management with CLI commands locally), only uses one module (for EKS cluster creation), and under-utilizes things like variables and other DRY and Least Privilege principals.
+
+As I alluded to in my description of how automated staging would work, this would much more heavily utilize common modules and variables across environments if I had implemented that as well. Some ways to do that would be utilizing `tfvars`, `variables.tf`, and `output.tf` files more frequently and/or using an overlay like Terragrunt as well.
+
+Another few things to note are:
+
+* I would normally use ElastiCache for a production Redis cluster implementation, but ran into issues getting it working with the sample application (I described these issues in Slack). Thus, my elasticache code is commented out.
+* The ECR resources are commented out because there is a compatibility issue with Docker's GitHub Actions for building and pushing. My understanding is that these actions utilize multi-layer caching, which ECR does not support. This is why I am using Docker Hub regitries at present (though I would prefer figuring out a workaround so we could use ECR private registries instead).
+* The RDS instance is NOT stored as a declarative Terraform resource. The reason being keeping it out maximizes agility in issue resolution and any automatic updates by AWS are not accidentally reverted by the Terraform state being unaware of them.
+
 Imperative construction of pipeline files to maintain DRY and composable code.
 
 
@@ -156,3 +174,4 @@ Imperative construction of pipeline files to maintain DRY and composable code.
 - Make action pipelines more DRY
 - Figure out how to get the Server connected to ElastiCache
 - Figure out how to automate full revert PR's
+- More caching

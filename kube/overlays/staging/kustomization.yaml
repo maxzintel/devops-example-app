@@ -12,6 +12,15 @@ resources:
 - ../../bases/base
 - ingress.yaml
 
+vars:
+  - name: DEPLOY_RELEASE
+    objref:
+      apiVersion: apps/v1
+      kind: Deployment
+      name: client
+    fieldref:
+      fieldpath: metadata.labels.release
+
 secretGenerator:
   - name: secrets
     envs: 
