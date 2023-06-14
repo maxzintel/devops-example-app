@@ -1,14 +1,8 @@
-# Max's CRE/DevOps Trial Project
-
-Firstly, I would like to say thank you for taking a look at my work. This entire interview process has been an incredible learning experience.
-
-Secondly, another thank you. I know this has taken a couple weeks due to my crazy schedule, so I truly appreciate your understanding throughout the process.
-
-Below I will reiterate the requirements of this project, describe how I fulfilled each of those, and discuss improvements I would make given more time.
+# DevOps Example
 
 **Table of Contents:**
 
-* Requirments
+* Requirements
   * Stretch Goals
 * Project Overview
   * The `.github` Directory
