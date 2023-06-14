@@ -24,7 +24,7 @@ then deployed via any deployment approach. *See GitHub Actions in `.github/workf
 auditable history. *This is tracked on the Actions screen in the GitHub UI.*
 5. All the dependent deployment of infrastructure has to be
 managed in code & deployment of the application has to be
-publicly reachable. *Please see my other repository, `maxzintel/chainlink-infra` for the Infrastructure as Code & the frontend site: client.quantumwerke.com.*
+publicly reachable. *Please see my other repository, `maxzintel/devops-example-infra` for the Infrastructure as Code & the frontend site: client.quantumwerke.com.*
 
 ### Stretch Goals
 
